@@ -398,3 +398,53 @@ INSERT INTO propuesta_partido(id_propuesta,id_partido ) VALUES
 (14,1),
 (15,1);
 
+--Actualizacion de datos 
+
+UPDATE lugar_procedencia SET nombre = 'Timbio' WHERE id_lugar_procedencia = 1;
+UPDATE lugar_procedencia SET nombre = 'La vega' WHERE id_lugar_procedencia = 2;
+UPDATE lugar_procedencia SET nombre = 'La yunga' WHERE id_lugar_procedencia = 3;
+UPDATE lugar_procedencia SET nombre = 'Las torres' WHERE id_lugar_procedencia = 4;
+UPDATE lugar_procedencia SET nombre = 'Santa rosa' WHERE id_lugar_procedencia = 5;
+
+UPDATE persona SET nombre = 'andres' WHERE id_persona = 1;
+UPDATE persona SET nombre = 'fabian' WHERE id_persona = 2;
+UPDATE persona SET nombre = 'pablo' WHERE  id_persona = 3;
+UPDATE persona SET nombre = 'victor' WHERE id_persona = 4;
+UPDATE persona SET nombre = 'camilo' WHERE id_persona = 5;
+
+UPDATE partido_politico SET nombre ='conservador' WHERE id_partido = 1;
+
+UPDATE reunion SET fecha = '11/04/2023' WHERE id_reunion = 1;
+UPDATE reunion SET fecha = '31/04/2023' WHERE id_reunion = 2;
+UPDATE reunion SET fecha = '24/04/2023' WHERE id_reunion = 3;
+UPDATE reunion SET fecha = '02/04/2023' WHERE id_reunion = 4;
+UPDATE reunion SET fecha = '07/04/2023' WHERE id_reunion = 5;
+
+
+UPDATE lugar_reunion SET nombre ='Lomas' WHERE id_lugar_reunion = 1;
+UPDATE lugar_reunion SET nombre ='Parque caldas' WHERE id_lugar_reunion = 2;
+UPDATE lugar_reunion SET nombre ='La rejoya' WHERE id_lugar_reunion = 3;
+UPDATE lugar_reunion SET nombre ='Moscopan' WHERE id_lugar_reunion = 4;
+UPDATE lugar_reunion SET nombre = 'El empedrado' WHERE id_lugar_reunion = 5;
+
+UPDATE item SET nombre_item ='Agua de panela' WHERE id_item = 1;
+UPDATE item SET nombre_item ='Mazamorra' WHERE id_item = 2;
+UPDATE item SET nombre_item ='mesas' WHERE id_item = 3;
+UPDATE item SET nombre_item ='Equipos de sonido' WHERE id_item = 4;
+UPDATE item SET nombre_item ='camaras' WHERE id_item = 5;
+
+UPDATE propuesta SET descripcion_propuesta ='mantenimiento de vias' WHERE id_propuesta = 1;
+UPDATE propuesta SET descripcion_propuesta ='mayor inversion en campo academico' WHERE id_propuesta = 2;
+UPDATE propuesta SET descripcion_propuesta ='Ubicar mas puntos de vigilancia en popayan' WHERE id_propuesta = 3;
+UPDATE propuesta SET descripcion_propuesta  ='mas inversion en campo de salud' WHERE id_propuesta = 4;
+UPDATE propuesta SET descripcion_propuesta ='construccion de nuevas bibliotecas' WHERE id_propuesta = 5;
+
+UPDATE pregunta SET id_propuesta = 1 WHERE id_pregunta = 1;
+UPDATE pregunta SET id_propuesta = 2 WHERE id_pregunta = 2;
+UPDATE pregunta SET id_propuesta = 5 WHERE id_pregunta = 3;
+UPDATE pregunta SET id_propuesta = 3 WHERE id_pregunta = 4;
+UPDATE pregunta SET id_propuesta = 4 WHERE id_pregunta = 5;
+
+
+
+
