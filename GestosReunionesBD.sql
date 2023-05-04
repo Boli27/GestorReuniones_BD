@@ -575,6 +575,32 @@ ON persona.id_persona = persona_reunion.id_persona
 JOIN reunion
 ON persona_reunion.id_reunion = reunion.id_reunion
 
+--Personas que asistieron a la reunion lomas y el lugar donde se realizo la reunion 
+--(Esta consulta fue la que se realizo en la sustentacion pedida por usted)
+SELECT lugar_reunion.nombre,reunion.tematica,persona.nombre
+FROM reunion
+JOIN persona_reunion
+ON reunion.id_reunion = persona_reunion.id_reunion
+JOIN persona
+ON persona_reunion.id_persona = persona.id_persona
+JOIN reunion_lugarreunion
+ON reunion_lugarreunion.id_reunion = reunion.id_reunion
+JOIN lugar_reunion
+ON lugar_reunion.id_lugar_reunion = reunion_lugarreunion.id_lugar_reunion
+WHERE lugar_reunion.nombre = 'lomas';
+
+--Pregunta de la propuesta y la persona que la respondio y su respuesta 
+
+SELECT  propuesta.tema_propuesta,pregunta.descricion_pregunta,persona.nombre,persona_pregunta.respuesta
+FROM propuesta
+JOIN pregunta
+ON propuesta.id_propuesta = pregunta.id_pregunta
+JOIN persona
+JOIN persona_pregunta
+ON persona_pregunta.id_persona = persona.id_persona
+ON persona_pregunta.id_pregunta = pregunta.id_pregunta;
+
+
 
 
 
