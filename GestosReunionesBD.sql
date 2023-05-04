@@ -600,6 +600,13 @@ JOIN persona_pregunta
 ON persona_pregunta.id_persona = persona.id_persona
 ON persona_pregunta.id_pregunta = pregunta.id_pregunta;
 
+--lugares que no tengan una reunion establecida 
+SELECT *
+FROM reunion
+RIGHT JOIN lugar_reunion
+ON reunion.id_reunion =lugar_reunion.id_lugar_reunion
+WHERE reunion.id_reunion IS null;
+
 
 
 
