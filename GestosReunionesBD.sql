@@ -600,12 +600,22 @@ JOIN persona_pregunta
 ON persona_pregunta.id_persona = persona.id_persona
 ON persona_pregunta.id_pregunta = pregunta.id_pregunta;
 
+--Correccion de la pregunta anterior
+SELECT  propuesta.tema_propuesta,pregunta.descripcion_pregunta,persona.nombre,persona_pregunta.respuesta
+FROM pregunta
+JOIN propuesta
+ON propuesta.id_propuesta = pregunta.id_propuesta
+JOIN persona_pregunta
+ON persona_pregunta.id_pregunta = pregunta.id_pregunta
+JOIN persona
+ON persona_pregunta.id_pregunta = persona.id_persona;
+
 --lugares que no tengan una reunion establecida 
 SELECT *
 FROM reunion
 RIGHT JOIN lugar_reunion
 ON reunion.id_reunion =lugar_reunion.id_lugar_reunion
-WHERE reunion.id_reunion IS null;
+WHERE reunion.id_reunion IS null; 
 
 
 
