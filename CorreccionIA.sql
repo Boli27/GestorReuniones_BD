@@ -113,3 +113,12 @@ CREATE TABLE propuesta_partido (
     FOREIGN KEY (id_partido) REFERENCES partido_politico (id_partido) ON DELETE CASCADE
 );
 
+--correccion DLL dada por la IA
+-- Tabla "persona"
+ALTER TABLE persona MODIFY telefono VARCHAR(15); -- Cambio del tipo de dato de INT(10) a VARCHAR(15) para almacenar números de teléfono de diferentes longitudes
+
+-- Tabla "reunion"
+ALTER TABLE reunion MODIFY fecha DATE; -- Cambio del tipo de dato de VARCHAR(10) a DATE para almacenar fechas de forma adecuada
+
+-- Tabla "pregunta"
+ALTER TABLE pregunta MODIFY descripcion_pregunta TEXT; -- Cambio del tipo de dato de VARCHAR(250) a TEXT para permitir descripciones más extensas
