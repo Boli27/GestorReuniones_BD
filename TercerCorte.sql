@@ -219,3 +219,116 @@ BEGIN
     END IF;
 END //
 DELIMITER;
+
+
+
+--Procesos almacenados 
+--Proceso almacenado que muestra la cantidad de productos que hay para x reunion
+DELIMITER $$
+CREATE PROCEDURE numero_productos(IN reunion varchar(50))
+BEGIN
+    SELECT COUNT(*) AS numero_items, reunion.tematica
+    FROM item
+    JOIN item_reunion
+    ON item.id_item= item_reunion.id_item
+    JOIN reunion
+    ON item_reunion.id_reunion = reunion.id_reunion
+    WHERE reunion.tematica = reunion;
+END $$
+DELIMITER ;
+--Porceso almacenado que da las personas que asistieron a una reunion y el lugar donde de realizo aquella reunion
+DELIMITER $$
+CREATE PROCEDURE personas_que_asisten(IN tematica_reunion varchar(50))
+BEGIN
+    SELECT lugar_reunion.nombre,reunion.tematica,persona.nombre
+    FROM reunion
+    JOIN persona_reunion
+    ON reunion.id_reunion = persona_reunion.id_reunion
+    JOIN persona
+    ON persona_reunion.id_persona = persona.id_persona
+    JOIN reunion_lugarreunion
+    ON reunion_lugarreunion.id_reunion = reunion.id_reunion
+    JOIN lugar_reunion
+    ON lugar_reunion.id_lugar_reunion = reunion_lugarreunion.id_lugar_reunion
+    WHERE reunion.tematica = tematica_reunion;
+END $$
+DELIMITER ;
+--las personas que son de x tipo de asistente 
+DELIMITER $$
+CREATE PROCEDURE numero_tipos_asistentes(IN tipo_asistente varchar(50))
+BEGIN
+    SELECT persona.id_persona,persona.nombre,persona.tipo_asistente
+    FROM persona
+    WHERE persona.tipo_asistente=tipo_asistente;
+END $$
+DELIMITER ;
+--personas que vienen de x lugar
+DELIMITER $$
+CREATE PROCEDURE personas_x_lugar(IN lugar_procedencia varchar(50))
+BEGIN
+    SELECT persona.id_persona,persona.nombre,lugar_procedencia.nombre 
+    FROM persona
+    INNER JOIN lugar_procedencia 
+    ON persona.id_lugar_procedencia = lugar_procedencia.id_lugar_procedencia
+    WHERE lugar_procedencia.nombre = lugar_procedencia;
+END $$
+DELIMITER ;
+--Proceso almacenado que nos da el promedio de personas que asisten a la reuniones
+CREATE PROCEDURE calcular_media_personas()
+BEGIN
+    DECLARE total_reuniones INT;
+    DECLARE total_personas INT;
+    DECLARE media DECIMAL(10,2);
+    SELECT COUNT(*) INTO total_reuniones FROM reunion;
+    SELECT COUNT(*) INTO total_personas FROM persona_reunion;
+    IF total_reuniones > 0 THEN
+        SET media = total_personas / total_reuniones;
+        SELECT media;
+    ELSE
+        SELECT 0;
+    END IF;
+END;
+--Proceso almacenado que muestra los productos que hay para x reunion
+DELIMITER $$
+CREATE PROCEDURE productos_reunion(IN reunion varchar(50))
+BEGIN
+    SELECT reunion.tematica, item.nombre_item FROM item
+    JOIN item_reunion
+    ON item.id_item= item_reunion.id_item
+    JOIN reunion
+    ON item_reunion.id_reunion = reunion.id_reunion
+    WHERE reunion.tematica = reunion;
+END $$
+DELIMITER ;
+--Items que empiezan con una letra especifica
+DELIMITER $$
+CREATE PROCEDURE buscar_item_por_letra(IN LETRA CHAR(1))
+BEGIN
+    SELECT item.nombre_item, item.id_item
+    FROM item
+    WHERE item.nombre_item LIKE CONCAT(letra, '%');
+END;
+--Buscar informacion de una propuesta por su ID
+DELIMITER $$
+CREATE PROCEDURE buscar_propuesta_por_ID(IN id_busqueda INTEGER(5))
+BEGIN
+    SELECT propuesta.tema_propuesta, propuesta.descripcion_propuesta
+    FROM propuesta
+    WHERE propuesta.id_propuesta LIKE CONCAT(id_busqueda, '%');
+END;
+--Buscar presupuestos segun la fecha de la reunion
+DELIMITER $$
+CREATE PROCEDURE buscar_presupuesto_por_fecha(IN fecha_busqueda VARCHAR(10))
+BEGIN
+    SELECT reunion.presupuesto, reunion.dirigida_por 
+    FROM reunion
+    WHERE reunion.fecha =(fecha_busqueda);
+END;
+--Busca la cantidad de veces que una persona dirigio reuniones
+DELIMITER $$
+CREATE PROCEDURE contador_veces_dirigio(IN nombre_dirigente VARCHAR(30),OUT contador INTEGER)
+BEGIN
+	SELECT COUNT(*) INTO contador
+    FROM reunion
+    WHERE reunion.dirigida_por = nombre_dirigente;
+END;
