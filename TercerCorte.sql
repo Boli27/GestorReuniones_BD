@@ -332,3 +332,66 @@ BEGIN
     FROM reunion
     WHERE reunion.dirigida_por = nombre_dirigente;
 END;
+
+--Vistas
+--Vista de personas y su lugar de procedencia 
+CREATE VIEW vista_personas_lugar AS
+SELECT persona.nombre AS persona, lugar_procedencia.nombre
+FROM persona
+INNER JOIN lugar_procedencia 
+ON persona.id_lugar_procedencia = lugar_procedencia.id_lugar_procedencia
+--Vista Reuniones por partido
+CREATE VIEW vista_reuniones_por_partido4 AS
+SELECT partido_politico.nombre, reunion.tematica
+FROM reunion 
+JOIN partido_politico  ON reunion.id_partido = partido_politico .id_partido;
+--Viste de las personas y sus respuestas
+CREATE VIEW respuesta_personas AS
+SELECT persona.id_persona,persona.nombre,persona_pregunta.respuesta
+FROM persona_pregunta
+INNER JOIN persona
+ON persona.id_persona = persona_pregunta.id_persona;
+--Los items para las reuniones
+CREATE VIEW items_reunion2 AS
+SELECT item.nombre_item,reunion.tematica,reunion.fecha
+FROM item_reunion
+INNER JOIN item
+ON item.id_item= item_reunion.id_item
+INNER JOIN reunion
+ON reunion.id_reunion= item_reunion.id_reunion;
+--vista de lugares que no tengan una reunion asignada 
+CREATE VIEW vista_lugares_sin_reunion AS
+SELECT lr.id_lugar_reunion, lr.nombre
+FROM lugar_reunion lr
+LEFT JOIN reunion_lugarreunion rl ON lr.id_lugar_reunion = rl.id_lugar_reunion
+WHERE rl.id_lugar_reunion IS NULL;
+--Vista de personas que su numero de telefono empieza por 321
+CREATE VIEW numero_tel AS
+SELECT persona.telefono FROM persona WHERE persona.telefono LIKE '321%';
+
+--Vista de personas que asistieron a la reunion con tematica debates
+CREATE VIEW asistentes_reunion_tematica_debates AS
+    SELECT persona.id_persona, persona.nombre ,reunion.id_reunion 
+    FROM persona
+    JOIN persona_reunion
+    ON persona.id_persona = persona_reunion.id_persona
+    JOIN reunion
+    ON reunion.id_reunion = persona_reunion.id_reunion
+    WHERE reunion.tematica = 'debates';
+--Numero total de items utilizados en todas las reuniones
+CREATE VIEW total_items_usados AS
+  SELECT COUNT(*) AS numero_items
+  FROM item
+  JOIN item_reunion
+  ON item.id_item= item_reunion.id_item
+  JOIN reunion
+  ON item_reunion.id_reunion = reunion.id_reunion
+--Vista del numero total de propuestas
+CREATE VIEW numero_propuestas AS
+	SELECT COUNT(*) AS numero_propuestas
+    FROM propuesta;
+--Vista de personas que estan en desacuerdo con las propuestas
+CREATE VIEW pesonas_desacuerdo AS
+	SELECT COUNT(*) AS numero_personas_desacuerdo
+    FROM persona_pregunta
+    WHERE persona_pregunta.respuesta = 'no esta de acuerdo'
