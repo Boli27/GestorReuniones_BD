@@ -266,13 +266,15 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE personas_x_lugar(IN lugar_procedencia varchar(50))
 BEGIN
-    SELECT persona.id_persona,persona.nombre,lugar_procedencia.nombre 
+    SELECT persona.nombre,lugar_procedencia.nombre_lugar 
     FROM persona
     INNER JOIN lugar_procedencia 
     ON persona.id_lugar_procedencia = lugar_procedencia.id_lugar_procedencia
-    WHERE lugar_procedencia.nombre = lugar_procedencia;
+    WHERE lugar_procedencia.nombre_lugar = lugar_procedencia;
 END $$
 DELIMITER ;
+
+
 --Proceso almacenado que nos da el promedio de personas que asisten a la reuniones
 CREATE PROCEDURE calcular_media_personas()
 BEGIN

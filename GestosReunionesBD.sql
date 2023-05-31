@@ -8,7 +8,7 @@ USE nombre_basededatos;
 -- Creación de la tabla "lugar_procedencia"
 CREATE TABLE lugar_procedencia (
     id_lugar_procedencia INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(50)
+    nombre_lugar VARCHAR(50)
 );
 
 -- Creación de la tabla "persona"
@@ -112,7 +112,6 @@ CREATE TABLE propuesta_partido (
     FOREIGN KEY (id_propuesta) REFERENCES propuesta (id_propuesta) ON DELETE CASCADE,
     FOREIGN KEY (id_partido) REFERENCES partido_politico (id_partido) ON DELETE CASCADE
 );
-
 
 --correccion DLL dada por la IA
 -- Tabla "persona"
