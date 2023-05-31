@@ -477,177 +477,171 @@ UPDATE pregunta SET id_propuesta = 4 WHERE id_pregunta = 5;
 
 --consultas 
 
---Todos los ítems para las reuniones.
-SELECT * FROM `item`;
---Los lugares de procedencia de los asistentes 
-SELECT * FROM `lugar_procedencia`;
---Todos los lugares de reuniones;
-SELECT * FROM `lugar_reunion`;
---Partido político como ejemplo 
-SELECT * FROM `lugar_reunion`;
---Todas las reuniones
-SELECT * FROM ` reunion`;
---Todas los nombre de las personas
-SELECT persona.nombre FROM ` persona`;
+-- Todos los ítems para las reuniones.
+SELECT * FROM item;
 
+-- Los lugares de procedencia de los asistentes.
+SELECT * FROM lugar_procedencia;
 
---Reuniones con el mayor presupuesto;
-SELECT * FROM reunion HAVING presupuesto=(select max(presupuesto) from reunion);
---Reuniones con el menor presupuesto;
-SELECT * FROM reunion HAVING presupuesto=(select min(presupuesto) from reunion);
---Reuniones que tengan que ver los debates
+-- Todos los lugares de reuniones.
+SELECT * FROM lugar_reunion;
+
+-- Partidos políticos como ejemplo.
+SELECT * FROM partido_politico;
+
+-- Todas las reuniones.
+SELECT * FROM reunion;
+
+-- Todos los nombres de las personas.
+SELECT nombre FROM persona;
+
+-- Reuniones con el mayor presupuesto.
+SELECT * FROM reunion ORDER BY presupuesto DESC LIMIT 1;
+
+-- Reuniones con el menor presupuesto.
+SELECT * FROM reunion ORDER BY presupuesto ASC LIMIT 1;
+
+-- Reuniones que tengan que ver con debates.
 SELECT * FROM reunion WHERE tematica LIKE '%debate%';
 
---Nombre de las personas que empiezan con a
-SELECT persona.nombre FROM persona WHERE nombre LIKE 'a%';
---Nombre de las personas que terminan por o
-SELECT persona.nombre FROM persona WHERE nombre LIKE '%o';
---Personas las cuales su numero de ceular incie en 321
+-- Nombres de las personas que empiezan con "a".
+SELECT nombre FROM persona WHERE nombre LIKE 'a%';
+
+-- Nombres de las personas que terminan con "o".
+SELECT nombre FROM persona WHERE nombre LIKE '%o';
+
+-- Personas cuyo número de celular inicie con "321".
 SELECT * FROM persona WHERE telefono LIKE '321%';
---personas que su telefono termine en 3 
+
+-- Personas cuyo número de teléfono termine en "3".
 SELECT * FROM persona WHERE telefono LIKE '%3';
---Personas que son de tipo invitados a las reuniones 
+
+-- Personas que son de tipo "invitado" a las reuniones.
 SELECT * FROM persona WHERE tipo_asistente = 'invitado';
---Personas que no son de tipo invitado a las reuniones
-SELECT * FROM persona WHERE NOT tipo_asistente = 'invitado';
---Personas que su numero de telefono inicia en 321 y su nombre termina por a
+
+-- Personas que no son de tipo "invitado" a las reuniones.
+SELECT * FROM persona WHERE tipo_asistente != 'invitado';
+
+-- Personas cuyo número de teléfono inicie con "321" y su nombre termine con "a".
 SELECT * FROM persona WHERE telefono LIKE '321%' AND nombre LIKE '%a';
---Personas que su numero de telefono termina en 3 y su nombre empieza por a
+
+-- Personas cuyo número de teléfono termine en "3" y su nombre empiece con "a".
 SELECT * FROM persona WHERE telefono LIKE '%3' AND nombre LIKE 'a%';
 
---Item que terminan por s
+-- Ítems que terminan con la letra "s".
 SELECT * FROM item WHERE nombre_item LIKE '%s';
---Item que empiezan por c
+
+-- Ítems que empiezan con la letra "c".
 SELECT * FROM item WHERE nombre_item LIKE 'c%';
 
+-- Listado de las personas y su lugar de procedencia.
+SELECT p.id_persona, p.nombre, lp.id_lugar_procedencia, lp.nombre AS lugar_procedencia
+FROM persona p
+INNER JOIN lugar_procedencia lp
+ON p.id_lugar_procedencia = lp.id_lugar_procedencia;
 
---Consultas con join
+-- Personas que provienen de "La yunga".
+SELECT p.id_persona, p.nombre, lp.id_lugar_procedencia, lp.nombre AS lugar_procedencia
+FROM persona p
+INNER JOIN lugar_procedencia lp
+ON p.id_lugar_procedencia = lp.id_lugar_procedencia
+WHERE lp.nombre = 'La yunga';
 
---listado de las personas y su lugar de procedencia 
-SELECT persona.id_persona,persona.nombre,lugar_procedencia.id_lugar_procedencia,lugar_procedencia.nombre
-FROM persona
-INNER JOIN lugar_procedencia 
-ON persona.id_lugar_procedencia = lugar_procedencia.id_lugar_procedencia
+-- Personas que no provienen de "La yunga".
+SELECT p.id_persona, p.nombre, lp.id_lugar_procedencia, lp.nombre AS lugar_procedencia
+FROM persona p
+INNER JOIN lugar_procedencia lp
+ON p.id_lugar_procedencia = lp.id_lugar_procedencia
+WHERE lp.nombre != 'La yunga';
 
---Personas que provienen de La yunga
-SELECT persona.id_persona,persona.nombre,lugar_procedencia.id_lugar_procedencia,lugar_procedencia.nombre 
-FROM persona
-INNER JOIN lugar_procedencia 
-ON persona.id_lugar_procedencia = lugar_procedencia.id_lugar_procedencia
-WHERE lugar_procedencia.nombre = 'La yunga';
+-- Ítems usados en la reunión de "presentacion".
+SELECT i.id_item, i.nombre_item, r.id_reunion, r.tematica
+FROM item i
+JOIN item_reunion ir
+ON i.id_item = ir.id_item
+JOIN reunion r
+ON ir.id_reunion = r.id_reunion
+WHERE r.tematica = 'presentacion';
 
---Personas que no provienen de La yunga
-SELECT persona.id_persona,persona.nombre,lugar_procedencia.id_lugar_procedencia,lugar_procedencia.nombre
-FROM persona
-INNER JOIN lugar_procedencia 
-ON persona.id_lugar_procedencia = lugar_procedencia.id_lugar_procedencia
-WHERE NOT lugar_procedencia.nombre = 'La yunga';
+-- Número de ítems usados en la reunión de "presentacion".
+SELECT COUNT(*) AS numero_items, r.tematica
+FROM item i
+JOIN item_reunion ir
+ON i.id_item = ir.id_item
+JOIN reunion r
+ON ir.id_reunion = r.id_reunion
+WHERE r.tematica = 'presentacion';
 
---Item usados en la reunion de "presentacion"
-SELECT item.id_item,item.nombre_item,reunion.id_reunion,reunion.tematica
-FROM item
-JOIN item_reunion
-ON item.id_item= item_reunion.id_item
-JOIN reunion
-ON item_reunion.id_reunion = reunion.id_reunion
-WHERE reunion.tematica = 'presentacion';
+-- Listado de asistentes en la reunión "debates".
+SELECT p.id_persona, p.nombre, r.id_reunion, r.tematica
+FROM persona p
+JOIN persona_reunion pr
+ON p.id_persona = pr.id_persona
+JOIN reunion r
+ON pr.id_reunion = r.id_reunion
+WHERE r.tematica = 'debates';
 
---Numero de items usados en la reunion de "presentacion"
-SELECT COUNT(*) AS numero_items, reunion.tematica
-FROM item
-JOIN item_reunion
-ON item.id_item= item_reunion.id_item
-JOIN reunion
-ON item_reunion.id_reunion = reunion.id_reunion
-WHERE reunion.tematica = 'presentacion';
-
---Listado de asistentes en la reunion "debates"
-SELECT persona.id_persona, persona.nombre , reunion.id_reunion,reunion.tematica 
-FROM persona
-JOIN persona_reunion
-ON persona.id_persona = persona_reunion.id_persona
-JOIN reunion
-ON reunion.id_reunion = persona_reunion.id_reunion
-WHERE reunion.tematica = 'debates';
-
---Numero de asistentes en la reunion "debates"
+-- Número de asistentes en la reunión "debates".
 SELECT COUNT(*) AS numero_personas
-FROM persona
-JOIN persona_reunion
-ON persona_reunion.id_persona=persona.id_persona
-JOIN reunion 
-ON persona_reunion.id_reunion = reunion.id_reunion
-WHERE reunion.tematica ='debates';
+FROM persona p
+JOIN persona_reunion pr
+ON p.id_persona = pr.id_persona
+JOIN reunion r
+ON pr.id_reunion = r.id_reunion
+WHERE r.tematica = 'debates';
 
---Reuniones que hicieron en el lugar lomas
-SELECT reunion.id_reunion,reunion.tematica,lugar_reunion.id_lugar_reunion,lugar_reunion.nombre
-FROM lugar_reunion
-JOIN reunion_lugarreunion
-ON reunion_lugarreunion.id_lugar_reunion = lugar_reunion.id_lugar_reunion
-JOIN reunion
-ON reunion_lugarreunion.id_reunion = reunion.id_reunion
-WHERE lugar_reunion.nombre = 'lomas';
+-- Reuniones que se hicieron en el lugar "lomas".
+SELECT r.id_reunion, r.tematica, lr.id_lugar_reunion, lr.nombre
+FROM reunion r
+JOIN reunion_lugarreunion rl
+ON r.id_reunion = rl.id_reunion
+JOIN lugar_reunion lr
+ON rl.id_lugar_reunion = lr.id_lugar_reunion
+WHERE lr.nombre = 'lomas';
 
---Numero de reuniones que se hicieron en el lugar lomas
-SELECT COUNT(*) numero_reuniones, reunion.tematica
-FROM lugar_reunion
-JOIN reunion_lugarreunion
-ON reunion_lugarreunion.id_lugar_reunion = lugar_reunion.id_lugar_reunion
-JOIN reunion
-ON reunion_lugarreunion.id_reunion = reunion.id_reunion
-WHERE lugar_reunion.nombre = 'lomas';
+-- Número de reuniones que se hicieron en el lugar "lomas".
+SELECT COUNT(*) AS numero_reuniones, r.tematica
+FROM reunion r
+JOIN reunion_lugarreunion rl
+ON r.id_reunion = rl.id_reunion
+JOIN lugar_reunion lr
+ON rl.id_lugar_reunion = lr.id_lugar_reunion
+WHERE lr.nombre = 'lomas';
 
---Numero de asistentes en todas las reuniones
+-- Número de asistentes en todas las reuniones.
 SELECT COUNT(*) AS numero_asistentes
-FROM persona
-JOIN persona_reunion
-ON persona.id_persona = persona_reunion.id_persona
-JOIN reunion
-ON persona_reunion.id_reunion = reunion.id_reunion
+FROM persona p
+JOIN persona_reunion pr
+ON p.id_persona = pr.id_persona
+JOIN reunion r
+ON pr.id_reunion = r.id_reunion;
 
---Personas que asistieron a la reunion lomas y el lugar donde se realizo la reunion 
---(Esta consulta fue la que se realizo en la sustentacion pedida por usted)
-SELECT lugar_reunion.nombre,reunion.tematica,persona.nombre
-FROM reunion
-JOIN persona_reunion
-ON reunion.id_reunion = persona_reunion.id_reunion
-JOIN persona
-ON persona_reunion.id_persona = persona.id_persona
-JOIN reunion_lugarreunion
-ON reunion_lugarreunion.id_reunion = reunion.id_reunion
-JOIN lugar_reunion
-ON lugar_reunion.id_lugar_reunion = reunion_lugarreunion.id_lugar_reunion
-WHERE lugar_reunion.nombre = 'lomas';
+-- Personas que asistieron a la reunión "lomas" y el lugar donde se realizó la reunión.
+SELECT lr.nombre AS lugar_reunion, r.tematica, p.nombre
+FROM reunion r
+JOIN persona_reunion pr
+ON r.id_reunion = pr.id_reunion
+JOIN persona p
+ON pr.id_persona = p.id_persona
+JOIN reunion_lugarreunion rl
+ON r.id_reunion = rl.id_reunion
+JOIN lugar_reunion lr
+ON rl.id_lugar_reunion = lr.id_lugar_reunion
+WHERE lr.nombre = 'lomas';
 
---Pregunta de la propuesta y la persona que la respondio y su respuesta 
+-- Pregunta de la propuesta y la persona que la respondió y su respuesta.
+SELECT p.tema_propuesta, pg.descripcion_pregunta, pe.nombre, pp.respuesta
+FROM pregunta pg
+JOIN propuesta p
+ON p.id_propuesta = pg.id_propuesta
+JOIN persona_pregunta pp
+ON pp.id_pregunta = pg.id_pregunta
+JOIN persona pe
+ON pp.id_persona = pe.id_persona;
 
-SELECT  propuesta.tema_propuesta,pregunta.descricion_pregunta,persona.nombre,persona_pregunta.respuesta
-FROM propuesta
-JOIN pregunta
-ON propuesta.id_propuesta = pregunta.id_pregunta
-JOIN persona
-JOIN persona_pregunta
-ON persona_pregunta.id_persona = persona.id_persona
-ON persona_pregunta.id_pregunta = pregunta.id_pregunta;
-
---Correccion de la pregunta anterior
-SELECT  propuesta.tema_propuesta,pregunta.descripcion_pregunta,persona.nombre,persona_pregunta.respuesta
-FROM pregunta
-JOIN propuesta
-ON propuesta.id_propuesta = pregunta.id_propuesta
-JOIN persona_pregunta
-ON persona_pregunta.id_pregunta = pregunta.id_pregunta
-JOIN persona
-ON persona_pregunta.id_pregunta = persona.id_persona;
-
---lugares que no tengan una reunion establecida 
-SELECT *
-FROM reunion
-RIGHT JOIN lugar_reunion
-ON reunion.id_reunion =lugar_reunion.id_lugar_reunion
-WHERE reunion.id_reunion IS null; 
-
-
-
-
-
+-- Lugares que no tienen una reunión establecida.
+SELECT lr.*
+FROM lugar_reunion lr
+LEFT JOIN reunion_lugarreunion rl
+ON lr.id_lugar_reunion = rl.id_lugar_reunion
+WHERE rl.id_reunion IS NULL;
